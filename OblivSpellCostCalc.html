@@ -1,0 +1,63 @@
+<html>
+<head>
+<script type="text/javascript">
+
+function calculation() {
+	var BaseVar = document.getElementById("BaseBox").value; //refers to the spell type's inherent multiplier
+	var fMagicDurMagBaseCostMultVar = document.getElementById("fMagicDurMagBaseCostMultBox").value; //which is then modified by a global value, by default *.1
+	var EvalBaseVar = BaseVar * fMagicDurMagBaseCostMultVar; //making the type of spell's cost * the modifier the evaluated base spell type cost
+	
+	var MagnitudeVar = document.getElementById("MagnitudeBox").value; //Magnitude of the spell
+	var fMagicCostScaleVar = document.getElementById("fMagicCostScaleBox").value; //another global value that modifies the magnitude, by default *1.28
+	var EvalMagnitudeVar = Math.pow(MagnitudeVar,fMagicCostScaleVar); //...exponentially :(
+	
+	if (EvalMagnitudeVar < 1) {EvalMagnitudeVar = 1} //Magnitude under values of 1 are treated as 1
+	
+	var DurationVar = document.getElementById("DurationBox").value; //Duration of the spell, and no global modifier this time!
+	
+	if (DurationVar < 1) {DurationVar = 1} //Again durations under 1 are treated as 1
+	
+	var AreaVar = document.getElementById("AreaBox").value; //Area of the spell
+	var fAreaMagicBaseCostMultVar = document.getElementById("fAreaMagicBaseCostMultBox").value; //whee more global variable modifiers, this one's *.15 by default
+	var EvalAreaVar = AreaVar * fAreaMagicBaseCostMultVar; //you know the drill
+	
+	if (EvalAreaVar < 1) {EvalAreaVar = 1} //you know the drill
+	
+	var fMagicRangeTargetCostMultVar = document.getElementById("fMagicRangeTargetCostMultBox").value; //usually making a spell targeted increases the cost by 50%. This can be changed with another global variable.
+	var RangeVar = fMagicRangeTargetCostMultVar; //okay this was really unnecessary but who cares
+	
+	if (document.getElementById("TargetedCheckbox").checked==false) {RangeVar = 1} //it's either ranged or it ain't
+	
+	var SkillVar = document.getElementById("SkillBox").value; //Player skill in the school of magic being cast
+	if (SkillVar < 0) {SkillVar = 0} //this one actually goes down to 0 rather than 1
+	else if (SkillVar > 100) {SkillVar = 100} //I'm pretty sure values over 100 are discarded when it comes to spells
+	var fMagicCasterSkillCostBaseVar = parseFloat(document.getElementById("fMagicCasterSkillCostBaseBox").value); //global variable usually set to .2, at 100 skill this is effectively the only value used
+	var fMagicCasterSkillCostMultVar = parseFloat(document.getElementById("fMagicCasterSkillCostMultBox").value); //global variable usually set to 1.2, the lower the less variance your skill will give but the cheaper the spells
+	var EvalSkillVar = fMagicCasterSkillCostBaseVar + fMagicCasterSkillCostMultVar * (1-SkillVar/100); //this one's a lot less straightforward :/
+	
+	//if (EvalSkillVar < 1) {EvalSkillVar = 1}
+	//actually I don't think this is right
+	
+	var OutputVar = EvalBaseVar * EvalMagnitudeVar * DurationVar * EvalAreaVar * EvalSkillVar * RangeVar;
+	document.getElementById('OutputBox').value=OutputVar;
+}
+
+</script>
+</head>
+<body>
+
+Oblivion Spell Cost Calculator. The variables starting with 'f' are internal variables you can't change outside of modding your game, so leave them alone if you're unsure.<br />
+"Base" refers to the spell type's base cost, I was too lazy to add a dropdown for every spell type in the game so look it up :p<br /><br />
+
+Base: <input type="text" id="BaseBox" value=0> fMagicDurMagBaseCostMult: <input type="text" id="fMagicDurMagBaseCostMultBox" value=0.1> <br />
+Magnitude: <input type="text" id="MagnitudeBox" value=0> fMagicCostScale: <input type="text" id="fMagicCostScaleBox" value=1.28> <br />
+Duration: <input type="text" id="DurationBox" value=0> <br />
+Area: <input type="text" id="AreaBox" value=0> fAreaMagicBaseCostMult: <input type="text" id="fAreaMagicBaseCostMultBox" value=0.15> <br />
+Targeted: <input type="checkbox" id="TargetedCheckbox"> fMagicRangeTargetCostMult: <input type="text" id="fMagicRangeTargetCostMultBox" value=1.5> <br />
+Skill: <input type="text" id="SkillBox" value=40> fMagicCasterSkillCostBase: <input type="text" id="fMagicCasterSkillCostBaseBox" value=0.2> fMagicCasterSkillCostMult: <input type="text" id="fMagicCasterSkillCostMultBox" value=1.2><br />
+
+<input type="button" onclick="calculation()" value="Calculate!" /><br />
+Total Magicka Cost: <input type="text" id="OutputBox">
+
+</body>
+</html>

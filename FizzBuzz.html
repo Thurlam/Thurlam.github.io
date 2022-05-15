@@ -1,0 +1,39 @@
+<html>
+<head>
+<script type="text/javascript">
+
+function FizzBuzz() {
+	var n = document.getElementById("InputBox").value;
+	
+	let answer = new Array(n);
+    for (let i=0; i<n; i++) {
+        let j = i+1;
+        if (j % 15 == 0) {
+            answer[i] = "FizzBuzz";
+        } else if (j % 3 == 0) {
+            answer[i] = "Fizz";
+        } else if (j % 5 == 0) {
+            answer[i] = "Buzz";
+        } else {
+            answer[i] = String(j);
+        }
+    }
+	document.getElementById('OutputBox').value=answer;
+}
+
+</script>
+</head>
+<body>
+
+Interactive FizzBuzz! Input an integer, press "FizzBuzz!", and this will spit out an array containing all the numbers from 1 to the input integer, with the appropriate numbers replaced with either 'Fizz,' 'Buzz,' or 'FizzBuzz.' <br /><br />
+
+Made for defnotabot because I was told to :)<br /><br />
+
+Input integer (whole number): <input type="text" id="InputBox" value=20><br />
+<br />
+<input type="button" onclick="FizzBuzz()" value="FizzBuzz!" /><br />
+<br />
+FizzBuzz array: <input type="text" style="width:1200px;" id="OutputBox">
+
+</body>
+</html>
